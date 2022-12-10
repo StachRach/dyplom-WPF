@@ -1,5 +1,4 @@
 ﻿// WYKONAWCA:  Stanisław Rachwał
-// INDEKS:     180504
 // KIERUNEK:   Inżynieria Biomedyczna, spec. Fizyka Medyczna
 // STOPIEŃ:    1
 // SEMESTR:    7
@@ -9,11 +8,13 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Windows;
 using System.IO.Ports;
 using System.Windows.Media;
+using InteractiveDataDisplay.WPF;
 using DispatcherPriority = System.Windows.Threading.DispatcherPriority;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -29,7 +30,6 @@ namespace dyplom_WPF;
 public partial class MainWindow
 {
     private static SerialPort? _port;
-    private double[][]? _dataArray;
 
     public MainWindow()
     {
@@ -46,7 +46,7 @@ public partial class MainWindow
         var data = sp.ReadExisting();
         Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action<string>)Update, data);
     }
-
+    
     private void Update(string data)
     {
         TxtStats.Text += data;
@@ -104,7 +104,7 @@ public partial class MainWindow
             case "Pojedynczy":
                 PortWrite("0");
                 TxtStats.Clear();
-                BtnShow.IsEnabled = false;
+                //BtnShow.IsEnabled = false;
                 break;
             case "1 sekunda" when CmbTs.Text == "10 ms":
                 PortWrite("1");
@@ -143,24 +143,59 @@ public partial class MainWindow
     }
     
 // ---------------------------------------------------------------------------------------------------------------------
-//                                        METODA KREŚLĄCA CHARAKTERYSTYKI
+//                                           METODA KREŚLĄCA CHARAKTERYSTYKI
 // ---------------------------------------------------------------------------------------------------------------------
 
     private void BtnShow_OnClick(object sender, RoutedEventArgs e)
     {
         var data = TxtStats.Text;
-        var temp = data.Split('\n').Select(x => x.Split('\t')).ToArray();
-        _dataArray = new double[temp.Length][];
+        var dataArray = data.Split('\n').Select(x => x.Split('\t')).ToArray();
 
-        for (var i = 1; i < temp.Length; i++)
+        var x = ModifyData(dataArray, 0, dataArray.Length);
+        var y1 = ModifyData(dataArray, 1, dataArray.Length);
+        var y2 = ModifyData(dataArray, 3, dataArray.Length);
+
+        var line1 = new LineGraph()
         {
-            for (var j = 0; j < temp[0].Length; j++)
-            {
-                _dataArray[i - 1][j] = double.Parse(temp[i][j]);
-            }
-        }
+            Stroke = Brushes.Magenta,
+            Description = "Szum bez filtra",
+            StrokeThickness = 2
+        };
+        var line2 = new LineGraph()
+        {
+            Stroke = Brushes.Cyan,
+            Description = "Szum z filtrem",
+            StrokeThickness = 2
+        };
+        
+        line1.Plot(x, y1);
+        line2.Plot(x, y2);
+        
+        Grid.Children.Clear();
+        Grid.Children.Add(line1);
+        Grid.Children.Add(line2);
     }
+    
+// ---------------------------------------------------------------------------------------------------------------------
+//                                             METODA OBRABIAJĄCA DANE
+// ---------------------------------------------------------------------------------------------------------------------
 
+    private static List<double> ModifyData(IReadOnlyList<string[]> d, int col, int len)
+    {
+        var temp = new List<double>();
+        
+        for (var i = 1; i < len - 1; i++)
+        {
+            if (col != 0)
+            {
+                d[i][col] = d[i][col].Replace(".", ",");
+            }
+            
+            temp.Add(double.Parse(d[i][col]));
+        }
+
+        return temp;
+    }
 // ---------------------------------------------------------------------------------------------------------------------
 //                                            METODA REGULUJĄCA OFFSET
 // ---------------------------------------------------------------------------------------------------------------------

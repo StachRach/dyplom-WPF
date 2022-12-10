@@ -1,6 +1,6 @@
 ﻿<!-- WYKONAWCA:  Stanisław Rachwał
-     INDEKS:     180504 
      KIERUNEK:   Inżynieria Biomedyczna, spec. Fizyka Medyczna 
+     STOPIEŃ:    1
      SEMESTR:    7 -->
 
 <Window x:Class="dyplom_WPF.MainWindow"
@@ -8,7 +8,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:oxy="http://oxyplot.org/wpf"
+        xmlns:d3="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
         mc:Ignorable="d"
         Title="Panel układu" Height="768" Width="1366" d:DataContext="{d:DesignInstance }">
 
@@ -50,5 +50,9 @@
         
         <TextBox x:Name="TxtStats" IsReadOnly="True" VerticalScrollBarVisibility="Visible" Margin="30 330 0 0"
                  HorizontalAlignment="Left" VerticalAlignment="Top" Height="340" Width="400"/>
+        
+        <d3:Chart Title="Szum pomiaru" BottomTitle="Time [ms]" LeftTitle="Pitch [deg]" Height="600" Width="800" Margin="400 30 0 0">
+                <Grid Name="Grid"/>
+        </d3:Chart>
     </Grid>
 </Window>

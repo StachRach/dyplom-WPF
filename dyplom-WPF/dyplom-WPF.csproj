@@ -9,6 +9,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="InteractiveDataDisplay.WPF" Version="1.0.0" />
+      <PackageReference Include="OxyPlot.Core" Version="2.1.2" />
+      <PackageReference Include="OxyPlot.Wpf" Version="2.1.2" />
       <PackageReference Include="System.IO.Ports" Version="7.0.0" />
     </ItemGroup>
 
