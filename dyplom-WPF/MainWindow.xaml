@@ -10,34 +10,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d3="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
         mc:Ignorable="d"
-        Title="Panel układu" Height="768" Width="1366" d:DataContext="{d:DesignInstance }">
+        Title="Panel układu" Height="768" Width="1366" d:DataContext="{d:DesignInstance}">
 
     <!--                                 ZNACZNIKI DEFINIUJĄCE WYGLĄD APLIKACJI                                      -->
     
-    <Grid Background="Azure">
+    <Grid Background="GhostWhite">
         <Button x:Name="BtnCheck" Click="BtnCheck_OnClick" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30 30 0 0"
                 Content="Sprawdzenie połączenia ze sterownikiem" Height="30" Width="250"/>
         <Label x:Name="LblName" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="300 30 0 0"
                Content="Nazwa układu" Height="30" Width="150" FontSize="12pt" Foreground="#888888"/>
         
         <Button x:Name="BtnReset" Click="BtnReset_OnClick" IsEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30 80 0 0"
-                Content="Ustawienie offsetu i połączenia z shieldem" Height="30" Width="250"/>
+                Content="Połączenie z shieldem, kalibracja żyroskopu" Height="30" Width="250"/>
         
-        <Label x:Name="LblTime" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30 130 0 0"
-               Content="Czas pomiaru" Height="30" Width="112" FontSize="12pt"/>
-        <ComboBox x:Name="CmbTime" IsEnabled="False" SelectedIndex="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150 130 0 0"
+        <Label x:Name="LblType" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30 130 0 0"
+               Content="Typ pomiaru" Height="30" Width="112" FontSize="12pt"/>
+        <ComboBox x:Name="CmbType" IsEnabled="False" SelectedIndex="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150 130 0 0"
                   Height="30" Width="130" FontSize="12pt">
-            <ComboBoxItem>10 sekund</ComboBoxItem>
-            <ComboBoxItem>1 sekunda</ComboBoxItem>
-            <ComboBoxItem>Pojedynczy</ComboBoxItem>
+            <ComboBoxItem>Zmiana kątów RPY</ComboBoxItem>
+            <ComboBoxItem>Położenie</ComboBoxItem>
         </ComboBox>
         
-        <Label x:Name="LblType" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30 180 0 0"
-               Content="Próbkowanie" Height="30" Width="112" FontSize="12pt"/>
-        <ComboBox x:Name="CmbTs" IsEnabled="False" SelectedIndex="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150 180 0 0"
+        <Label x:Name="LblAng" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30 180 0 0"
+               Content="Kąt Eulera" Height="30" Width="112" FontSize="12pt"/>
+        <ComboBox x:Name="CmbAng" IsEnabled="False" SelectedIndex="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150 180 0 0"
                   Height="30" Width="130" FontSize="12pt">
-            <ComboBoxItem>100 ms</ComboBoxItem>
-            <ComboBoxItem>10 ms</ComboBoxItem>
+            <ComboBoxItem>Pitch (OX)</ComboBoxItem>
+            <ComboBoxItem>Roll (OY)</ComboBoxItem>
+            <ComboBoxItem>Oba</ComboBoxItem>
         </ComboBox>
         
         <Button x:Name="BtnStart" IsEnabled="False" Click="BtnStart_OnClick" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30 230 0 0"
@@ -51,7 +51,8 @@
         <TextBox x:Name="TxtStats" IsReadOnly="True" VerticalScrollBarVisibility="Visible" Margin="30 330 0 0"
                  HorizontalAlignment="Left" VerticalAlignment="Top" Height="340" Width="400"/>
         
-        <d3:Chart Title="Szum pomiaru" BottomTitle="Time [ms]" LeftTitle="Pitch [deg]" Height="600" Width="800" Margin="400 30 0 0">
+        <d3:Chart Title="Wizualizacja pomiaru" BottomTitle="Time [ms]" LeftTitle="Pitch [deg]" Height="600" Width="800" 
+                  Margin="400 0 0 0">
                 <Grid Name="Grid"/>
         </d3:Chart>
     </Grid>

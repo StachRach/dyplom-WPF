@@ -72,7 +72,7 @@ public partial class MainWindow
     {
         try
         {
-            _port = new SerialPort("COM3", 38400);
+            _port = new SerialPort("COM3", 115200);
             _port.Open();
             LblName.Foreground = Brushes.Green;
             LblName.Content = "Arduino UNO";
@@ -82,8 +82,8 @@ public partial class MainWindow
             BtnReset.IsEnabled = true;
             BtnShow.IsEnabled = true;
             BtnStart.IsEnabled = true;
-            CmbTime.IsEnabled = true;
-            CmbTs.IsEnabled = true;
+            CmbType.IsEnabled = true;
+            CmbAng.IsEnabled = true;
         }
         catch (IOException)
         {
@@ -99,29 +99,28 @@ public partial class MainWindow
     private void BtnStart_OnClick(object sender, RoutedEventArgs e)
     {
          
-        switch (CmbTime.Text)
+        switch (CmbType.Text)
         {
-            case "Pojedynczy":
+            case "Położenie":
                 PortWrite("0");
                 TxtStats.Clear();
-                //BtnShow.IsEnabled = false;
                 break;
-            case "1 sekunda" when CmbTs.Text == "10 ms":
+            case "Zmiana kątów RPY" when CmbAng.Text == "10 ms":
                 PortWrite("1");
                 TxtStats.Clear();
                 BtnShow.IsEnabled = true;
                 break;
-            case "1 sekunda" when CmbTs.Text == "100 ms":
+            case "Zmiana kątów RPY" when CmbAng.Text == "100 ms":
                 PortWrite("11");
                 TxtStats.Clear();
                 BtnShow.IsEnabled = true;
                 break;
-            case "10 sekund" when CmbTs.Text == "10 ms":
+            case "10 sekund" when CmbAng.Text == "10 ms":
                 PortWrite("2");
                 TxtStats.Clear();
                 BtnShow.IsEnabled = true;
                 break;
-            case "10 sekund" when CmbTs.Text == "100 ms":
+            case "10 sekund" when CmbAng.Text == "100 ms":
                 PortWrite("22");
                 TxtStats.Clear();
                 BtnShow.IsEnabled = true;
@@ -155,16 +154,16 @@ public partial class MainWindow
         var y1 = ModifyData(dataArray, 1, dataArray.Length);
         var y2 = ModifyData(dataArray, 3, dataArray.Length);
 
-        var line1 = new LineGraph()
+        var line1 = new LineGraph
         {
             Stroke = Brushes.Magenta,
-            Description = "Szum bez filtra",
+            Description = "Pomiar bez filtra",
             StrokeThickness = 2
         };
-        var line2 = new LineGraph()
+        var line2 = new LineGraph
         {
             Stroke = Brushes.Cyan,
-            Description = "Szum z filtrem",
+            Description = "Pomiar z filtrem",
             StrokeThickness = 2
         };
         
