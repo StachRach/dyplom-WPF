@@ -104,6 +104,15 @@ public partial class MainWindow
             case "Położenie":
                 PortWrite("0");
                 TxtStats.Clear();
+                
+                Plt.LeftTitle = "Kąt [deg]";
+                break;
+            case "Szum":
+                PortWrite("0");
+                TxtStats.Clear();
+
+                Plt.Title = "Pomiar szumu";
+                Plt.LeftTitle = "Kąt [deg]";
                 break;
             case "Zmiana kątów RPY" when CmbAng.Text == "10 ms":
                 PortWrite("1");
@@ -151,8 +160,19 @@ public partial class MainWindow
         var dataArray = data.Split('\n').Select(x => x.Split('\t')).ToArray();
 
         var x = ModifyData(dataArray, 0, dataArray.Length);
-        var y1 = ModifyData(dataArray, 1, dataArray.Length);
-        var y2 = ModifyData(dataArray, 3, dataArray.Length);
+        List<double> y1;
+        List<double> y2;
+
+        if (CmbAng.Text == "Pitch (OX)")
+        {
+            y1 = ModifyData(dataArray, 1, dataArray.Length);
+            y2 = ModifyData(dataArray, 3, dataArray.Length);
+        }
+        else
+        {
+            y1 = ModifyData(dataArray, 2, dataArray.Length);
+            y2 = ModifyData(dataArray, 4, dataArray.Length);
+        }
 
         var line1 = new LineGraph
         {
@@ -183,7 +203,7 @@ public partial class MainWindow
     {
         var temp = new List<double>();
         
-        for (var i = 1; i < len - 1; i++)
+        for (var i = 11; i < len - 1; i++)
         {
             if (col != 0)
             {

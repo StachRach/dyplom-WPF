@@ -29,6 +29,7 @@
                   Height="30" Width="130" FontSize="12pt">
             <ComboBoxItem>Zmiana kątów RPY</ComboBoxItem>
             <ComboBoxItem>Położenie</ComboBoxItem>
+            <ComboBoxItem>Szum</ComboBoxItem>
         </ComboBox>
         
         <Label x:Name="LblAng" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30 180 0 0"
@@ -51,7 +52,7 @@
         <TextBox x:Name="TxtStats" IsReadOnly="True" VerticalScrollBarVisibility="Visible" Margin="30 330 0 0"
                  HorizontalAlignment="Left" VerticalAlignment="Top" Height="340" Width="400"/>
         
-        <d3:Chart Title="Wizualizacja pomiaru" BottomTitle="Time [ms]" LeftTitle="Pitch [deg]" Height="600" Width="800" 
+        <d3:Chart x:Name="Plt" Title="Wizualizacja pomiaru" BottomTitle="Time [ms]" Height="600" Width="800" 
                   Margin="400 0 0 0">
                 <Grid Name="Grid"/>
         </d3:Chart>
