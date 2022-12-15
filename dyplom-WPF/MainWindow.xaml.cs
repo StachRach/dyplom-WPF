@@ -104,35 +104,16 @@ public partial class MainWindow
             case "Położenie":
                 PortWrite("0");
                 TxtStats.Clear();
-                
-                Plt.LeftTitle = "Kąt [deg]";
                 break;
             case "Szum":
                 PortWrite("0");
                 TxtStats.Clear();
-
+                
                 Plt.Title = "Pomiar szumu";
-                Plt.LeftTitle = "Kąt [deg]";
                 break;
-            case "Zmiana kątów RPY" when CmbAng.Text == "10 ms":
+            case "Zmiana kątów RPY":
                 PortWrite("1");
                 TxtStats.Clear();
-                BtnShow.IsEnabled = true;
-                break;
-            case "Zmiana kątów RPY" when CmbAng.Text == "100 ms":
-                PortWrite("11");
-                TxtStats.Clear();
-                BtnShow.IsEnabled = true;
-                break;
-            case "10 sekund" when CmbAng.Text == "10 ms":
-                PortWrite("2");
-                TxtStats.Clear();
-                BtnShow.IsEnabled = true;
-                break;
-            case "10 sekund" when CmbAng.Text == "100 ms":
-                PortWrite("22");
-                TxtStats.Clear();
-                BtnShow.IsEnabled = true;
                 break;
         }
         if (_port != null) _port.DataReceived += DataReceived;
@@ -160,20 +141,63 @@ public partial class MainWindow
         var dataArray = data.Split('\n').Select(x => x.Split('\t')).ToArray();
 
         var x = ModifyData(dataArray, 0, dataArray.Length);
+        
         List<double> y1;
         List<double> y2;
 
-        if (CmbAng.Text == "Pitch (OX)")
+        switch (CmbType.Text)
         {
-            y1 = ModifyData(dataArray, 1, dataArray.Length);
-            y2 = ModifyData(dataArray, 3, dataArray.Length);
-        }
-        else
-        {
-            y1 = ModifyData(dataArray, 2, dataArray.Length);
-            y2 = ModifyData(dataArray, 4, dataArray.Length);
-        }
+            case "Zmiana kątów RPY":
+                y1 = ModifyData(dataArray, 1, dataArray.Length);
+                y2 = ModifyData(dataArray, 2, dataArray.Length);
+                var y3 = ModifyData(dataArray, 3, dataArray.Length);
 
+                var line = new LineGraph
+                {
+                    Stroke = Brushes.Magenta,
+                    StrokeThickness = 2
+                };
+
+                switch (CmbAng.Text)
+                {
+                    case "Yaw (OZ)":
+                        line.Plot(x, y3);
+                        break;
+                    case "Roll (OY)":
+                        line.Plot(x, y2);
+                        break;
+                    default:
+                        line.Plot(x, y1);
+                        break;
+                }
+
+                Plt.LegendVisibility = Visibility.Hidden;
+                Grid.Children.Clear();
+                Grid.Children.Add(line);
+                break;
+            default:
+                switch (CmbAng.Text)
+                {
+                    case "Pitch (OX)":
+                        y1 = ModifyData(dataArray, 1, dataArray.Length);
+                        y2 = ModifyData(dataArray, 3, dataArray.Length);
+                        PlotData(x, y1, y2);
+                        break;
+                    case "Roll (OY)":
+                        y1 = ModifyData(dataArray, 2, dataArray.Length);
+                        y2 = ModifyData(dataArray, 4, dataArray.Length);
+                        PlotData(x, y1, y2);
+                        break;
+                    case "Yaw (OZ)":
+                        MessageBox.Show("Brak odpowiednich danych.");
+                        break;
+                }
+                break;
+        }
+    }
+
+    private void PlotData(List<double> a, IEnumerable<double> b, IEnumerable<double> c)
+    {
         var line1 = new LineGraph
         {
             Stroke = Brushes.Magenta,
@@ -186,9 +210,9 @@ public partial class MainWindow
             Description = "Pomiar z filtrem",
             StrokeThickness = 2
         };
-        
-        line1.Plot(x, y1);
-        line2.Plot(x, y2);
+                
+        line1.Plot(a, b);
+        line2.Plot(a, c);
         
         Grid.Children.Clear();
         Grid.Children.Add(line1);
