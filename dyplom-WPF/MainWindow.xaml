@@ -29,6 +29,7 @@
                   Height="30" Width="130" FontSize="12pt">
             <ComboBoxItem>Zmiana kątów RPY</ComboBoxItem>
             <ComboBoxItem>Położenie</ComboBoxItem>
+            <ComboBoxItem>Szum</ComboBoxItem>
         </ComboBox>
         
         <Label x:Name="LblAng" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30 180 0 0"

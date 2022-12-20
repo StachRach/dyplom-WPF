@@ -108,7 +108,6 @@ public partial class MainWindow
             case "Szum":
                 PortWrite("0");
                 TxtStats.Clear();
-                
                 Plt.Title = "Pomiar szumu";
                 break;
             case "Zmiana kątów RPY":
@@ -223,11 +222,13 @@ public partial class MainWindow
 //                                             METODA OBRABIAJĄCA DANE
 // ---------------------------------------------------------------------------------------------------------------------
 
-    private static List<double> ModifyData(IReadOnlyList<string[]> d, int col, int len)
+    private List<double> ModifyData(IReadOnlyList<string[]> d, int col, int len)
     {
         var temp = new List<double>();
+
+        var index = CmbType.Text is "Położenie" or "Szum" ? 21 : 1;
         
-        for (var i = 11; i < len - 1; i++)
+        for (var i = index; i < len - 1; i++)
         {
             if (col != 0)
             {
